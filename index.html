@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting Cleaner Vocal Removal: How Your Source File Changes the Result</title>
+<meta name="description" content="Why the same song can separate cleanly or badly depending on the file you start with: formats, bitrate, sample rate, loudness and video sources explained.">
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:740px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1b1f24}
+h1{font-size:1.95rem;line-height:1.25}h2{margin-top:2rem;color:#7a1f4d}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:6px 8px;text-align:left}
+.box{background:#fbf0f5;border-left:4px solid #7a1f4d;padding:10px 14px}
+</style>
+</head>
+<body>
+<h1>Getting Cleaner Vocal Removal: How Your Source File Changes the Result</h1>
+<p>Modern AI separation models are good at splitting a mixed song into vocals and accompaniment, but they can only work with what is in the file. Two people can run the same song through the same tool and get very different results, simply because one started from a better source. This guide explains what to look for before you upload.</p>
+
+<h2>1. Start from the least compressed version you have</h2>
+<p>Lossy formats such as MP3 and AAC throw away parts of the sound that are hard to hear in a full mix. Unfortunately, those are often the same quiet details a separation model uses to tell a voice from a guitar or a synth pad. The artefacts compression leaves behind, the swirly or watery sound around cymbals, tend to end up in both the vocal and the instrumental output.</p>
+<table>
+<tr><th>Source</th><th>What to expect</th></tr>
+<tr><td>WAV / FLAC (lossless)</td><td>Best result. Use this whenever you have it.</td></tr>
+<tr><td>MP3 / AAC at 256-320 kbps</td><td>Usually very close to lossless for separation.</td></tr>
+<tr><td>MP3 at 128 kbps or lower</td><td>Noticeable "underwater" artefacts and more vocal bleed.</td></tr>
+<tr><td>Audio recorded from speakers with a phone</td><td>Room echo is baked in; expect a rough result.</td></tr>
+</table>
+<p class="box">Converting a 128 kbps MP3 to WAV does not help. The missing detail is already gone; you only make the file bigger.</p>
+
+<h2>2. Do not pre-process the song</h2>
+<p>It is tempting to boost the volume, add EQ or run a "vocal remover" effect from an old audio editor first. Avoid it. Limiting and clipping smear the transients the model relies on, and the old phase-cancellation trick leaves a hollow, half-removed vocal that confuses the AI. Give the tool the original file and do any polishing on the output.</p>
+
+<h2>3. Watch out for clipping</h2>
+<p>Many modern masters are very loud and touch 0 dBFS constantly. If a waveform looks like a solid block, the peaks are flattened. A separation model cannot recover what clipping removed, so you may hear crackle in the instrumental during the loudest choruses. If you have an older or less loud release of the same song, such as an original CD rather than a remaster, try it.</p>
+
+<h2>4. Sample rate is less important than you think</h2>
+<p>44.1 kHz and 48 kHz both work well. Most tools resample internally anyway. A file labelled 96 kHz is not automatically better; what matters is that the original recording was not compressed heavily on the way to you.</p>
+
+<h2>5. Separating audio from a video</h2>
+<p>If the song you want is inside a video, such as a performance or a clip you filmed, the audio track is usually AAC at a moderate bitrate. You can upload the video directly to a tool that accepts video files, or extract the audio first without re-encoding:</p>
+<pre>ffmpeg -i performance.mp4 -vn -c:a copy audio.m4a</pre>
+<p><code>-c:a copy</code> keeps the original audio stream exactly as it is, so you do not add a second round of compression.</p>
+
+<h2>6. Know which songs are naturally hard</h2>
+<ul>
+<li>Heavy reverb on the vocal: the echo tail is hard to separate from the music.</li>
+<li>Stacked harmonies and backing vocals: some may stay in the instrumental.</li>
+<li>Vocals doubled by a lead instrument playing the same melody.</li>
+<li>Live recordings with crowd noise singing along.</li>
+</ul>
+
+<h2>Putting it together</h2>
+<p>Use the best file you can find, upload it untouched, and judge the result on headphones rather than laptop speakers. If you want to try it right away, you can <a href="https://videovocalremover.com/">remove vocals from a song online</a> in the browser and compare a lossless file with an MP3 of the same track; the difference is usually easy to hear.</p>
+<p style="color:#666;font-size:.9rem">Notes maintained by the VocalRemover team.</p>
+</body>
+</html>
